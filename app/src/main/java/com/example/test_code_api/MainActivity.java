@@ -9,10 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 
@@ -23,13 +24,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
+import com.example.test_code_api.model.ExampleItem;
 
 
-import android.view.View;
-
-
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -52,11 +49,16 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
     private ArrayList<ExampleItem> mExamplelist;
     private RequestQueue mRequestQueue;
 
+    private Button buttonInscription;
+    private Button buttonLogin;
+
     public int k = 1;
     TextView mTextViewResult;
     ImageView imageView;
     RequestQueue mQueue;
     String urlimage;
+
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -65,14 +67,32 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        buttonInscription = findViewById(R.id.buttonInscription);
+        buttonLogin = findViewById(R.id.buttonLogin);
+
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mExamplelist = new ArrayList<>();
 
         mRequestQueue = Volley.newRequestQueue(this);
         parseJSON();
+
+        buttonInscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inscriptionIntent = new Intent(MainActivity.this, InscriptionActivity.class);
+                startActivity(inscriptionIntent);
+            }
+        });
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
     }
 
     private void parseJSON() {
@@ -133,4 +153,6 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
         startActivity(detailIntent);
 
     }
+
+
 }

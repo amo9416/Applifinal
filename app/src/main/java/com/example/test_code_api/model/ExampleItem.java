@@ -1,4 +1,4 @@
-package com.example.test_code_api;
+package com.example.test_code_api.model;
 
 public class ExampleItem {
     private String mImageUrl;
