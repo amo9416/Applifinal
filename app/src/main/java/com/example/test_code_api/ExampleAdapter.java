@@ -15,11 +15,27 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
+public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.exampleViewHolder> {
+    private ArrayList<ExampleItem> mExamplelist;
 
     private Context mContext ;
-    private ArrayList<ExampleItem> mExamplelist;
     private OnItemClickListener mListener;
+
+    public ExampleAdapter(ArrayList<ExampleItem> mExamplelist){ this.mExamplelist = mExamplelist; }
+
+    public void setFilteredList(ArrayList<ExampleItem> filteredList){
+        this.mExamplelist = filteredList;
+        notifyDataSetChanged();
+    }
+
+
+    public static class ExampleViewHolder extends RecyclerView.ViewHolder{
+        public ImageView mImageView;
+
+        public ExampleViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
 
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -36,13 +52,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public exampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.example_item, parent, false);
-        return new ExampleViewHolder(v);
+        return new exampleViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull exampleViewHolder holder, int position) {
         ExampleItem currentItem = mExamplelist.get(position);
 
         String imageUrl = currentItem.getImageUrl();
@@ -56,9 +72,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
         Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
 
-
-
-
     }
 
     @Override
@@ -66,7 +79,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         return mExamplelist.size();
     }
 
-    public class ExampleViewHolder extends RecyclerView.ViewHolder {
+    public class exampleViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView mImageView ;
         public TextView mTextViewCreator;
@@ -74,7 +87,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public TextView mTextViewDate ;
 
 
-        public ExampleViewHolder(@NonNull View itemView) {
+        public exampleViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.image_view);
             mTextViewCreator = itemView.findViewById(R.id.text_view_creator);

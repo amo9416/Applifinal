@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +29,7 @@ import com.example.test_code_api.model.ExampleItem;
 
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,16 +47,18 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
     public String overview;
 
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mExampleAdataper;
+    private ExampleAdapter mExampleAdaptper;
     private ArrayList<ExampleItem> mExamplelist;
     private RequestQueue mRequestQueue;
+    private SearchView searchView;
 
     public int k = 1;
     TextView mTextViewResult;
     ImageView imageView;
     RequestQueue mQueue;
     String urlimage;
-
+    int mode_filter_on = 0 ;
+    ArrayList<ExampleItem> filteredList ;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -62,18 +66,65 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        searchView = findViewById(R.id.searchView);
+        CharSequence query = searchView.getQuery();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String texte = newText;
+                filteredList = filterList(newText);
+                mode_filter_on = 1 ;
+                return true;
+            }
+        });
+
+        /*mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mExamplelist = new ArrayList<>();
 
         mRequestQueue = Volley.newRequestQueue(this);
         parseJSON();
+    }*/
+
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mExamplelist = new ArrayList<>();
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        parseJSON();
     }
+
+    public  ArrayList<ExampleItem> filterList(String text) {
+        ArrayList<ExampleItem> filteredList = new ArrayList<>();
+        for(ExampleItem item : mExamplelist){
+            if(item.getCreator().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+        }
+
+        if(filteredList.isEmpty()){
+            Toast.makeText(this,"Aucune donnée trouvée",Toast.LENGTH_SHORT).show();
+        }else{
+            mExampleAdaptper.setFilteredList(filteredList);
+
+        }
+
+        return filteredList;
+    }
+
 
     private void parseJSON() {
 
-        for (k = 0; k < 10; k++)
+        for (k = 0; k < 50; k++)
         {
 
             String Url = "https://api.themoviedb.org/3/movie/top_rated?api_key=94919f610cee6635900db1b211be75e7&language=en-US&page=" + k;
@@ -96,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
                                 mExamplelist.add(new ExampleItem(urlimage, title, rating, date, overview));
                             }
 
-                            mExampleAdataper = new ExampleAdapter(MainActivity.this, mExamplelist);
-                            mRecyclerView.setAdapter(mExampleAdataper);
-                            mExampleAdataper.setOnItemClickListener(MainActivity.this);
+                            mExampleAdaptper = new ExampleAdapter(MainActivity.this, mExamplelist);
+                            mRecyclerView.setAdapter(mExampleAdaptper);
+                            mExampleAdaptper.setOnItemClickListener(MainActivity.this);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -118,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
 }
 
 
-    @Override
+    /*@Override
     public void onItemClick(int position) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         ExampleItem clickedItem = mExamplelist.get(position);
@@ -128,7 +179,22 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
 
         startActivity(detailIntent);
 
+    }*/
+    @Override
+    public void onItemClick(int position) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        ExampleItem clickedItem;
+        if(mode_filter_on == 1) {
+            clickedItem = filteredList.get(position);
+
+        }else{
+            clickedItem = mExamplelist.get(position);
+            mode_filter_on = 0;
+        }
+
+        detailIntent.putExtra(EXTRA_URL, clickedItem.getImageUrl());
+        detailIntent.putExtra(EXTRA_CREATOR,clickedItem.getOverview());
+
+        startActivity(detailIntent);
     }
-
-
 }
