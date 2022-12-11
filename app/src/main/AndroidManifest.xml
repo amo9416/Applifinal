@@ -15,8 +15,10 @@
         android:theme="@style/Theme.Test_code_API"
         tools:targetApi="31">
         <activity
-            android:name=".Moovies"
-            android:exported="false">
+            android:name=".MainActivitytest"
+            android:exported="false"
+            android:label="@string/title_activity_main_activitytest"
+            android:theme="@style/Theme.Test_code_API.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

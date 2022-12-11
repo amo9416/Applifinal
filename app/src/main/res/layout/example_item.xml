@@ -12,6 +12,20 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <Switch
+            android:id="@+id/myFavorite"
+            android:layout_width="match_parent"
+            android:checked="false"
+            android:layout_height="wrap_content"
+            android:text="Add in favorite" />
+
+        <Switch
+            android:id="@+id/myList"
+            android:checked="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add in my list" />
+
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="match_parent"
@@ -35,7 +49,18 @@
             android:id="@+id/text_view_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="like" />
+            android:text="date" />
+
+        <RatingBar
+            android:id="@+id/myRating"
+            android:numStars="7"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:stepSize="0.5"
+            android:isIndicator="false"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

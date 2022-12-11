@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.test_code_api.model.ExampleItem;
 
 
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,15 +86,6 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
             }
         });
 
-        /*mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mExamplelist = new ArrayList<>();
-
-        mRequestQueue = Volley.newRequestQueue(this);
-        parseJSON();
-    }*/
-
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -140,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
                                 JSONObject results = jsonArray.getJSONObject(i);
                                 String title = results.getString("title");
                                 String date = results.getString("release_date");
-                                double rating = results.getInt("vote_average");
+                                double rating = results.getDouble("vote_average");
                                 overview = results.getString("overview");
                                 String image = results.getString("poster_path");
                                 urlimage = "https://image.tmdb.org/t/p/w500" + image;
@@ -168,18 +161,6 @@ public class MainActivity extends AppCompatActivity implements ExampleAdapter.On
 
 }
 
-
-    /*@Override
-    public void onItemClick(int position) {
-        Intent detailIntent = new Intent(this, DetailActivity.class);
-        ExampleItem clickedItem = mExamplelist.get(position);
-
-        detailIntent.putExtra(EXTRA_URL, clickedItem.getImageUrl());
-        detailIntent.putExtra(EXTRA_CREATOR,clickedItem.getOverview());
-
-        startActivity(detailIntent);
-
-    }*/
     @Override
     public void onItemClick(int position) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
